@@ -151,6 +151,7 @@ impl<'a> BlockElementsIter<'a> {
     }
 
     #[inline]
+    #[allow(clippy::option_option)] // Avoid warning in original code
     fn step(&mut self) -> Option<Option<Element<'a>>> {
         match self.state {
             ElementsIterState::Group => match self.groups.next() {
