@@ -1,29 +1,29 @@
 [package]
-name = "osmpbf"
-version = "0.1.12"
-authors = ["Johannes Hofmann <mail@b-r-u.org>"]
-readme = "README.md"
-repository = "https://github.com/b-r-u/osmpbf"
-homepage = "https://github.com/b-r-u/osmpbf"
-description = """
+name         = "osmpbf"
+version      = "0.1.12"
+authors      = ["Johannes Hofmann <mail@b-r-u.org>"]
+readme       = "README.md"
+repository   = "https://github.com/b-r-u/osmpbf"
+homepage     = "https://github.com/b-r-u/osmpbf"
+description  = """
 A reader for the OpenStreetMap PBF file format (*.osm.pbf).
 """
-categories = ["parser-implementations", "encoding", "science"]
-keywords = ["openstreetmap", "osm", "pbf", "protocolbuffer", "protobuf"]
-license = "MIT/Apache-2.0"
+categories   = ["parser-implementations", "encoding", "science"]
+keywords     = ["openstreetmap", "osm", "pbf", "protocolbuffer", "protobuf"]
+license      = "MIT/Apache-2.0"
 
 [badges]
-travis-ci = { repository = "b-r-u/osmpbf" }
-appveyor = { repository = "b-r-u/osmpbf" }
+travis-ci    = { repository = "b-r-u/osmpbf" }
+appveyor     = { repository = "b-r-u/osmpbf" }
 
 [features]
-default = ["system-libz"]
-system-libz = ["flate2"]
+default      = ["system-libz"]
+system-libz  = ["flate2"]
 
 [dependencies]
-protobuf = "2.0"
-byteorder = "1.1"
-flate2 = { version = "1.0", optional = true }
-inflate = "0.4"
-memmap = "0.7"
-rayon = "1.0"
+byteorder   = "1.1"
+flate2      = { version = "1.0", optional = true }
+inflate     = "0.4"
+memmap      = "0.7"
+protobuf    = "2.0"
+rayon       = "1.0"

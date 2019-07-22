@@ -1,12 +1,11 @@
 //! Nodes, ways and relations
 
-use error::Result;
 use block::str_from_stringtable;
 use dense::DenseNode;
-use proto::osmformat::PrimitiveBlock;
+use error::Result;
 use proto::osmformat;
+use proto::osmformat::PrimitiveBlock;
 use std;
-
 
 /// An enum with the OSM core elements: nodes, ways and relations.
 #[derive(Clone, Debug)]
@@ -35,10 +34,7 @@ pub struct Node<'a> {
 
 impl<'a> Node<'a> {
     pub(crate) fn new(block: &'a PrimitiveBlock, osmnode: &'a osmformat::Node) -> Node<'a> {
-        Node {
-            block,
-            osmnode,
-        }
+        Node { block, osmnode }
     }
 
     /// Returns the node id. It should be unique between nodes and might be negative to indicate
@@ -85,16 +81,18 @@ impl<'a> Node<'a> {
 
     /// Returns the latitude coordinate in degrees.
     pub fn lat(&self) -> f64 {
-        0.000_000_001_f64 * (self.block.get_lat_offset() +
-                             (i64::from(self.block.get_granularity()) *
-                              self.osmnode.get_lat())) as f64
+        0.000_000_001_f64
+            * (self.block.get_lat_offset()
+                + (i64::from(self.block.get_granularity()) * self.osmnode.get_lat()))
+                as f64
     }
 
     /// Returns the longitude coordinate in degrees.
     pub fn lon(&self) -> f64 {
-        0.000_000_001_f64 * (self.block.get_lon_offset() +
-                             (i64::from(self.block.get_granularity()) *
-                              self.osmnode.get_lon())) as f64
+        0.000_000_001_f64
+            * (self.block.get_lon_offset()
+                + (i64::from(self.block.get_granularity()) * self.osmnode.get_lon()))
+                as f64
     }
 
     /// Returns an iterator over the tags of this node
@@ -130,10 +128,7 @@ pub struct Way<'a> {
 
 impl<'a> Way<'a> {
     pub(crate) fn new(block: &'a PrimitiveBlock, osmway: &'a osmformat::Way) -> Way<'a> {
-        Way {
-            block,
-            osmway,
-        }
+        Way { block, osmway }
     }
 
     /// Returns the way id.
@@ -181,8 +176,8 @@ impl<'a> Way<'a> {
     /// node id.
     pub fn refs(&self) -> WayRefIter<'a> {
         WayRefIter {
-           deltas: self.osmway.get_refs().iter(),
-           current: 0,
+            deltas: self.osmway.get_refs().iter(),
+            current: 0,
         }
     }
 
@@ -223,10 +218,7 @@ pub struct Relation<'a> {
 
 impl<'a> Relation<'a> {
     pub(crate) fn new(block: &'a PrimitiveBlock, osmrel: &'a osmformat::Relation) -> Relation<'a> {
-        Relation {
-            block,
-            osmrel,
-        }
+        Relation { block, osmrel }
     }
 
     /// Returns the relation id.
@@ -313,7 +305,7 @@ impl<'a> Iterator for WayRefIter<'a> {
             Some(&d) => {
                 self.current += d;
                 Some(self.current)
-            },
+            }
             None => None,
         }
     }
@@ -330,7 +322,7 @@ impl<'a> ExactSizeIterator for WayRefIter<'a> {}
 pub enum RelMemberType {
     Node,
     Way,
-    Relation
+    Relation,
 }
 
 impl From<osmformat::Relation_MemberType> for RelMemberType {
@@ -388,9 +380,11 @@ impl<'a> Iterator for RelMemberIter<'a> {
     type Item = RelMember<'a>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        match (self.role_sids.next(),
-               self.member_id_deltas.next(),
-               self.member_types.next()) {
+        match (
+            self.role_sids.next(),
+            self.member_id_deltas.next(),
+            self.member_types.next(),
+        ) {
             (Some(role_sid), Some(mem_id_delta), Some(member_type)) => {
                 self.current_member_id += *mem_id_delta;
                 Some(RelMember {
@@ -399,7 +393,7 @@ impl<'a> Iterator for RelMemberIter<'a> {
                     member_id: self.current_member_id,
                     member_type: RelMemberType::from(*member_type),
                 })
-            },
+            }
             _ => None,
         }
     }
@@ -433,7 +427,7 @@ impl<'a> Iterator for TagIter<'a> {
                 } else {
                     None
                 }
-            },
+            }
             _ => None,
         }
     }
@@ -481,10 +475,7 @@ pub struct Info<'a> {
 
 impl<'a> Info<'a> {
     fn new(block: &'a PrimitiveBlock, info: &'a osmformat::Info) -> Info<'a> {
-        Info {
-            block,
-            info,
-        }
+        Info { block, info }
     }
 
     /// Returns the version of this element.
@@ -526,7 +517,10 @@ impl<'a> Info<'a> {
     /// Returns the user name.
     pub fn user(&self) -> Option<Result<&'a str>> {
         if self.info.has_user_sid() {
-            Some(str_from_stringtable(self.block, self.info.get_user_sid() as usize))
+            Some(str_from_stringtable(
+                self.block,
+                self.info.get_user_sid() as usize,
+            ))
         } else {
             None
         }

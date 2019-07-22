@@ -82,7 +82,6 @@ extern crate flate2;
 #[cfg(not(feature = "system-libz"))]
 extern crate inflate;
 
-
 pub use blob::*;
 pub use block::*;
 pub use dense::*;
@@ -91,12 +90,12 @@ pub use error::{BlobError, Error, ErrorKind, Result};
 pub use mmap_blob::*;
 pub use reader::*;
 
-mod error;
-mod proto;
-pub mod reader;
 pub mod blob;
 pub mod block;
 pub mod dense;
 pub mod elements;
+mod error;
 pub mod mmap_blob;
+mod proto;
+pub mod reader;
 mod util;
