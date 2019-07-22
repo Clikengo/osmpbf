@@ -35,16 +35,22 @@ impl<'a> DenseNode<'a> {
 
     /// Returns the latitude coordinate in degrees.
     pub fn lat(&self) -> f64 {
-        0.000_000_001_f64
-            * (self.block.get_lat_offset() + (i64::from(self.block.get_granularity()) * self.lat))
-                as f64
+        0.000_000_001_f64 * self.lat_in_nano_degrees() as f64
     }
 
     /// Returns the longitude coordinate in degrees.
     pub fn lon(&self) -> f64 {
-        0.000_000_001_f64
-            * (self.block.get_lon_offset() + (i64::from(self.block.get_granularity()) * self.lon))
-                as f64
+        0.000_000_001_f64 * self.lon_in_nano_degrees() as f64
+    }
+
+    /// Returns the latitude coordinate in nano-degrees.
+    pub fn lat_in_nano_degrees(&self) -> i64 {
+        self.block.get_lat_offset() + (i64::from(self.block.get_granularity()) * self.lat)
+    }
+
+    /// Returns the longitude coordinate in nano-degrees.
+    pub fn lon_in_nano_degrees(&self) -> i64 {
+        self.block.get_lon_offset() + (i64::from(self.block.get_granularity()) * self.lon)
     }
 
     /// Returns the time stamp in milliseconds since the epoch.
